@@ -1,0 +1,4 @@
+---
+
+- name: Set hosts file
+  template: src=hosts.j2 dest=/etc/hosts mode=0644

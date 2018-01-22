@@ -1,0 +1,41 @@
+---
+- name: Configuring qapmtw Project dev environment
+  hosts: kafka-nodes
+  vars_files:
+    - vars.yml
+
+  pre_tasks:
+    - name: Install Required Packages
+      become: true
+      become_method: sudo
+      yum:
+        update_cache: true
+        pkg: "{{ item }}"
+        state: present
+      with_items:
+        - wget
+        - curl
+        - git
+        - gcc-c++
+        - make
+        - unzip
+        - vim
+
+  tasks:
+    - name: "Add a maximum nodes to the zookeeper-nodes group"
+      add_host:
+        name: "{{ hostvars[item.1].inventory_hostname }}"
+        ansible_host: "{{ hostvars[item.1].ansible_host|default(hostvars[item.1].ansible_ssh_host) }}"
+        id: "{{ item.0 + 1 }}"
+        groups: kafka-nodes
+      with_indexed_items: "{{ groups['kafka-nodes']|sort }}"
+
+
+- name: "Apply the common role to all nodes"
+  hosts: kafka-nodes
+  become: yes
+  roles:
+    - common
+    - java
+    - zookeeper
+    - kafka

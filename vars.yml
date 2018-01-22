@@ -1,0 +1,13 @@
+---
+zookeeper:
+  version: 3.4.8
+  dir: /opt/zookeeper
+  data_dir: /opt/zookeeper/data
+  log_dir: /opt/zookeeper/log
+
+  client_port: 2181
+  leader_port: 2888
+  election_port: 3888
+
+  user: zookeeper
+  group: zookeeper
