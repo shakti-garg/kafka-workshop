@@ -8,7 +8,6 @@
     get_url: url={{ jdk_tarball_url }}  dest={{ java_archive }} headers="Cookie:' gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie'" validate_certs=no owner=root group=root mode=744
 
   - name: Unpack archive
-   # command: "tar -xzvf {{java_archive}} -C {{download_folder}} creates={{java_name}}"
     action: shell tar -xzvf {{java_archive}} -C {{download_folder}}
 
   - name: Fix ownership
@@ -30,14 +29,6 @@
   - stat: path={{remote_file_path}}
     register: file_path
 
-  # Write file content in file_content variable
-  #  - set_fact: file_content=""
-
-  # If file exist then copy content in remote file.
-  #  - copy: content={{file_content}} dest={{remote_file_path}}
-  #    when: file_path.stat.exists == true
-  #
-  # Copy /etc/profile.d/oracle_jdk.sh with content
   - copy:
       content: |
                 #!/bin/bash
@@ -54,4 +45,3 @@
   # Export the env on th fly to make system wide change
   - name: Source the file {{profile_path}}/oracle_jdk.sh
     action: shell source /etc/profile
-

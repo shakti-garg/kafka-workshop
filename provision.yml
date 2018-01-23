@@ -1,26 +1,8 @@
 ---
-- name: Configuring qapmtw Project dev environment
+- name: Configuring Kafka Workshop environment
   hosts: kafka-nodes
   vars_files:
     - vars.yml
-
-  pre_tasks:
-    - name: Install Required Packages
-      become: true
-      become_method: sudo
-      yum:
-        update_cache: true
-        pkg: "{{ item }}"
-        state: present
-      with_items:
-        - wget
-        - curl
-        - git
-        - gcc-c++
-        - make
-        - unzip
-        - vim
-
   tasks:
     - name: "Add a maximum nodes to the zookeeper-nodes group"
       add_host:
@@ -35,7 +17,6 @@
   hosts: kafka-nodes
   become: yes
   roles:
-    - common
     - java
     - zookeeper
     - kafka
