@@ -5,7 +5,7 @@ Vagrant.configure(2) do |config|
   config.vm.box = "centos/7"
   config.vm.box_check_update = false
   config.ssh.insert_key = false
-  config.vm.synced_folder ".", "/opt/kafka_workshop", :nfs => { :mount_options => ["dmode=777","fmode=777"] }
+  config.vm.synced_folder "../", "/opt/kafka_workshop", :nfs => { :mount_options => ["dmode=777","fmode=777"] }
 
   config.vm.network "forwarded_port", guest: 2181, host: 2181
   config.vm.network "forwarded_port", guest: 9092, host: 9092

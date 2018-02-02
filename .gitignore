@@ -1,3 +1,9 @@
 .vagrant/
 provision.retry
 .idea/
+kafka-clients/producer/.gradle
+kafka-clients/producer/producer.iml
+kafka-clients/producer/build
+
+
+
