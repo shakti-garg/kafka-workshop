@@ -4,12 +4,16 @@ import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.kstream.KStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Properties;
 
 import static org.apache.kafka.streams.StreamsConfig.*;
 
 public class StreamApp {
+
+    private static final Logger logger = LoggerFactory.getLogger(StreamApp.class);
 
     private static final String BOOTSTRAP_SERVERS = "kafka-cluster:9092";
     private static final String TOPIC = "my-topic";
@@ -30,7 +34,9 @@ public class StreamApp {
 
         StreamsBuilder builder = new StreamsBuilder();
         KStream<Integer, String> source = builder.stream(TOPIC);
-        source.filter((key, value) -> key % 2 == 0).to("filtered-my-topic");
+        source.filter((key, value) -> key % 2 == 0)
+                .peek((key, value) -> logger.info("filtered record: ({}, {})", key, value))
+                .to("filtered-my-topic");
 
         return new KafkaStreams(builder.build(), props);
     }
