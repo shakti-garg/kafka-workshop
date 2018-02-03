@@ -15,6 +15,7 @@ public class ProducerClient {
     private static final String BOOTSTRAP_SERVERS = "kafka-cluster:9092";
 
     public static void main(String[] args) {
+        logger.info("started");
         final Producer<Integer, String> producer = createProducer();
         // Create Producer
 
