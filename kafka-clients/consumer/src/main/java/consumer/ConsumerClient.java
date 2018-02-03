@@ -9,15 +9,16 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 public class ConsumerClient {
 
 	private static final Logger logger = LoggerFactory.getLogger(ConsumerClient.class);
 
-	private static final String TOPIC = "my-topic";
 	private static final String BOOTSTRAP_SERVERS = "kafka-cluster:9092";
+	private static final List<String> TOPICS = Arrays.asList("my-topic", "filtered-my-topic");
 
 	public static void main(String[] args) {
 		logger.info("here");
@@ -33,7 +34,8 @@ public class ConsumerClient {
 					break;
 			}
 
-			records.forEach(record -> logger.info("Message received: {}", record));
+			records.forEach(record -> logger.info("Message received: topic={}, key={}, value={}, offset={}, partition={}",
+					record.topic(), record.key(), record.value(), record.offset()));
 
 			consumer.commitSync();
 		}
@@ -50,7 +52,7 @@ public class ConsumerClient {
 
 		final Consumer<Integer, String> consumer = new KafkaConsumer<>(props);
 
-		consumer.subscribe(Collections.singletonList(TOPIC));
+		consumer.subscribe(TOPICS);
 		return consumer;
 	}
 }
