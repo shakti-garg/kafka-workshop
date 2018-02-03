@@ -18,6 +18,9 @@ Vagrant.configure(2) do |config|
 
   config.vm.hostname = "kafka-cluster"
 
+  config.vm.define config.vm.hostname do |dev|
+  end
+
   config.vm.provision "ansible" do |ansible|
       ansible.playbook = "provision.yml"
       ansible.inventory_path = "inventory"
