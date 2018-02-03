@@ -15,7 +15,8 @@
 
 - name: "Apply the common role to all nodes"
   hosts: kafka-nodes
-  become: yes
+  become: true
+  become_method: sudo
   roles:
     - java
     - zookeeper
