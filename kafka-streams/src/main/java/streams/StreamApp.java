@@ -1,12 +1,10 @@
 package streams;
 
 import org.apache.kafka.common.serialization.Serdes;
-import org.apache.kafka.streams.*;
+import org.apache.kafka.streams.KafkaStreams;
+import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.kstream.KStream;
-import org.apache.kafka.streams.kstream.Produced;
-import org.apache.kafka.streams.processor.Processor;
 
-import java.util.Arrays;
 import java.util.Properties;
 
 import static org.apache.kafka.streams.StreamsConfig.*;

@@ -1,13 +1,10 @@
 apply plugin: 'java'
-apply plugin: 'maven'
 apply plugin: 'application'
 
 repositories {
     mavenCentral()
 
 }
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
 
 dependencies {
     compile group: 'org.apache.kafka', 'kafka-clients','1.0.0'
