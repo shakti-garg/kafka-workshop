@@ -1,4 +1,4 @@
 .idea/
 .gradle/
 out/
-kafka-streams.iml
+producer.iml
