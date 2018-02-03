@@ -1,9 +1,17 @@
 .vagrant/
 provision.retry
 .idea/
+
+# Producer
+
 kafka-clients/producer/.gradle
 kafka-clients/producer/producer.iml
 kafka-clients/producer/build
+kafka-clients/producer/out
 
+# Consumer
 
-
+kafka-clients/consumer/.gradle
+kafka-clients/consumer/producer.iml
+kafka-clients/consumer/build
+kafka-clients/consumer/out
