@@ -25,7 +25,8 @@ public class ProducerClient {
 
             try {
                 RecordMetadata metadata = producer.send(record).get();
-                logger.info("Message sent: record={}, metadata={}", record, metadata);
+                logger.info("Message sent: key={}, value={}, offset={}, partition={}", record.key(),
+                        record.value(), metadata.offset(), metadata.partition());
             } catch (Exception e) {
                 logger.error(e.getMessage());
             }
