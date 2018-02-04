@@ -1,14 +1,12 @@
 package consumer;
 
-import org.apache.kafka.clients.consumer.Consumer;
-import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.consumer.ConsumerRecords;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.clients.consumer.*;
 import org.apache.kafka.common.serialization.IntegerDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
@@ -17,31 +15,35 @@ public class ConsumerClient {
 
 	private static final Logger logger = LoggerFactory.getLogger(ConsumerClient.class);
 
-	private static final String BOOTSTRAP_SERVERS = "kafka-cluster:9092";
+	private static final String BOOTSTRAP_SERVERS = "localhost:9092";
 	private static final List<String> TOPICS = Arrays.asList("my-topic", "filtered-my-topic");
 
-	public static void main(String[] args) {
+	public static ArrayList<ConsumerRecord<Integer, String>> consumeTill(int limit) {
 		logger.info("here");
+
 		Consumer<Integer, String> consumer = createConsumer();
-		int limit = 100;
-		int emptyResponse = 0;
-		while (true) {
+
+		int responseCount = 0;
+		ArrayList<ConsumerRecord<Integer, String>> consumedRecords = new ArrayList<>();
+
+		while (responseCount < limit) {
+
 			final ConsumerRecords<Integer, String> records = consumer.poll(1000);
 
-			if (records.isEmpty()) {
-				emptyResponse += 1;
-				if (emptyResponse > limit)
-					break;
-			}
+			responseCount += records.count();
 
-			records.forEach(record -> logger.info("Message received: topic={}, key={}, value={}, offset={}, partition={}",
-					record.topic(), record.key(), record.value(), record.offset()));
-
+			records.forEach(
+					record -> {
+						logger.info("Message received: topic={}, key={}, value={}, offset={}, partition={}",
+								record.topic(), record.key(), record.value(), record.offset());
+						consumedRecords.add(record);
+					});
 			consumer.commitSync();
 		}
 		consumer.close();
-
+		return consumedRecords;
 	}
+
 
 	private static Consumer<Integer, String> createConsumer() {
 		final Properties props = new Properties();
