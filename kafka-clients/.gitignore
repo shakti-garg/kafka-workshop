@@ -1,4 +1,4 @@
 .idea/
 .gradle/
 out/
-kafka-client.iml
+kafka-clients.iml
