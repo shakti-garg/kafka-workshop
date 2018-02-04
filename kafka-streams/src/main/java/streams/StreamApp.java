@@ -19,13 +19,18 @@ public class StreamApp {
     private static final String TOPIC = "my-topic";
 
     public static void main(String[] args) {
+        start();
+    }
+
+    public static void start() {
         KafkaStreams streams = createStream();
         streams.start();
 
         Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
     }
 
-    private static KafkaStreams createStream() {
+
+    public static KafkaStreams createStream() {
         Properties props = new Properties();
         props.put(APPLICATION_ID_CONFIG, "stream-my-topic");
         props.put(BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
