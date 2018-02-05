@@ -19,20 +19,7 @@ public class UserClickEventProducer {
 
 	private static final String USER_CLICK_TOPIC = "user-click";
 
-	private static final List<UserClick> userClicks = Arrays.asList(
-			new UserClick("bob", "10.1.2.5"),
-			new UserClick("alice", "192.168.4.2"),
-			new UserClick("John", "10.11.2.1"),
-			new UserClick("alice", "192.168.4.2"),
-			new UserClick("bob", "10.1.2.5"),
-			new UserClick("alice", "192.168.4.2"),
-			new UserClick("bob", "10.1.2.5"),
-			new UserClick("alice", "192.168.4.2"),
-			new UserClick("alice", "192.168.4.2"),
-			new UserClick("bob", "10.1.2.5")
-	);
-
-	public static void publishEvents() {
+	public static void publishEvents(List<UserClick> userClicks) {
 
 		Producer<String, UserClick> producer = createProducer();
 		userClicks.forEach(userClick -> {
