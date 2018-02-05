@@ -17,14 +17,14 @@ public class AnomalyDetectionTest {
 	@Test
 	public void shouldDetectAnomalousUser() throws Exception {
 
-		StreamApp.start();
+//		StreamApp.start();
 
 		UserClickEventProducer.publishEvents();
 
 		List<ConsumerRecord<String, UserClick>> consumerRecords = AnomalousUserConsumer.consume();
 
 		Assert.assertNotNull(consumerRecords);
-		Assert.assertThat(consumerRecords.size(), is(1));
+		Assert.assertThat(consumerRecords.size(), is(10));
 
 //		Assert.assertThat(anomalousUsers.value().getUser(), is("Alice"));
 	}

@@ -2,15 +2,17 @@ package consumer;
 
 import model.UserClick;
 import org.apache.kafka.clients.consumer.*;
-import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
-import org.apache.kafka.connect.json.JsonDeserializer;
+import serializer.UserClickDeserializer;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Properties;
 
 public class AnomalousUserConsumer {
-	private static final String BOOTSTRAP_SERVERS = "localhost:9092";
-	private static final List<String> TOPICS = Arrays.asList("my-topic", "filtered-my-topic");
+	private static final String BOOTSTRAP_SERVERS = "kafka-cluster:9092";
+	private static final List<String> TOPICS = Arrays.asList("user-click");
 
 	public static List<ConsumerRecord<String, UserClick>> consume() {
 		Consumer<String, UserClick> consumer = createConsumer();
@@ -35,7 +37,7 @@ public class AnomalousUserConsumer {
 		props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
 		props.put(ConsumerConfig.GROUP_ID_CONFIG, "KafkaExampleConsumer");
 		props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
-		props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class.getName());
+		props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, UserClickDeserializer.class.getName());
 
 		final Consumer<String, UserClick> consumer = new KafkaConsumer<>(props);
 
