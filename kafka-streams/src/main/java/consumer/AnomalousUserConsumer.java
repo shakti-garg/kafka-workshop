@@ -3,7 +3,7 @@ package consumer;
 import model.UserClick;
 import org.apache.kafka.clients.consumer.*;
 import org.apache.kafka.common.serialization.StringDeserializer;
-import serializer.UserClickDeserializer;
+import serdes.UserClickDeserializer;
 
 import java.util.ArrayList;
 import java.util.Arrays;

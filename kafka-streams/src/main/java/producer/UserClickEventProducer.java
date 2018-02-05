@@ -6,7 +6,7 @@ import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
-import serializer.UserClickSerializer;
+import serdes.UserClickSerializer;
 
 import java.util.Arrays;
 import java.util.List;
