@@ -1,4 +1,4 @@
-package model;
+package com.anomaly_detection_stream.model;
 
 public class UserClick {
 	private String user;
@@ -20,6 +20,5 @@ public class UserClick {
 
 		return ipAddress;
 	}
-
 
 }

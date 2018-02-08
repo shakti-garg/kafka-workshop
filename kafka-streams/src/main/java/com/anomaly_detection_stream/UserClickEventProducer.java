@@ -1,21 +1,19 @@
-package producer;
+package com.anomaly_detection_stream;
 
-import model.UserClick;
+import com.anomaly_detection_stream.model.UserClick;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
-import serdes.UserClickSerializer;
+import com.anomaly_detection_stream.serializer.UserClickSerializer;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
 public class UserClickEventProducer {
 
 	private static final String BOOTSTRAP_SERVERS = "kafka-cluster:9092";
-	private static final List<String> TOPICS = Arrays.asList("my-topic", "filtered-my-topic");
 
 	private static final String USER_CLICK_TOPIC = "user-click";
 

@@ -3,3 +3,4 @@
 out/
 build/
 kafka-streams.iml
+streams-store/
