@@ -12,24 +12,22 @@ public class ProducerClient {
 	private static final Logger logger = LoggerFactory.getLogger(ProducerClient.class);
 
 	private static final String TOPIC = "my-topic";
-	private static final String BOOTSTRAP_SERVERS = "localhost:9092";
+	private static final String BOOTSTRAP_SERVERS = "kafka-cluster:9092";
 
 	public static void publish(int numberOfRecords) {
 		logger.info("started");
-		final Producer<Integer, String> producer = createProducer();
+
 		// Create Producer
+		final Producer<Integer, String> producer = createProducer();
 
-		for (int i = 0; i < numberOfRecords; i++) {
-			ProducerRecord<Integer, String> record =
-					new ProducerRecord<>(TOPIC, i, "message count: " + i);
-
-			try {
-				RecordMetadata metadata = producer.send(record).get();
-				logger.info("Message sent: key={}, value={}, offset={}, partition={}", record.key(),
-						record.value(), metadata.offset(), metadata.partition());
-			} catch (Exception e) {
-				logger.error(e.getMessage());
-			}
+		ProducerRecord<Integer, String> record =
+				new ProducerRecord<>(TOPIC, 1, "message count: " + 1);
+		try {
+			RecordMetadata metadata = producer.send(record).get();
+			logger.info("Message sent: key={}, value={}, offset={}, partition={}", record.key(),
+					record.value(), metadata.offset(), metadata.partition());
+		} catch (Exception e) {
+			logger.error(e.getMessage());
 		}
 
 		producer.close();

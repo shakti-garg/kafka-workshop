@@ -15,37 +15,32 @@ public class ConsumerClient {
 
 	private static final Logger logger = LoggerFactory.getLogger(ConsumerClient.class);
 
-	private static final String BOOTSTRAP_SERVERS = "localhost:9092";
-	private static final List<String> TOPICS = Arrays.asList("my-topic", "filtered-my-topic");
+	private static final String BOOTSTRAP_SERVERS = "kafka-cluster:9092";
+	private static final List<String> TOPICS = Arrays.asList("my-topic");
 
 	public static ArrayList<ConsumerRecord<Integer, String>> consumeTill(int limit) {
 		logger.info("here");
 
 		Consumer<Integer, String> consumer = createConsumer();
 
-		int responseCount = 0;
 		ArrayList<ConsumerRecord<Integer, String>> consumedRecords = new ArrayList<>();
 
-		while (responseCount < limit) {
+		final ConsumerRecords<Integer, String> records = consumer.poll(1000);
 
-			final ConsumerRecords<Integer, String> records = consumer.poll(1000);
-
-			responseCount += records.count();
-
-			records.forEach(
-					record -> {
-						logger.info("Message received: topic={}, key={}, value={}, offset={}, partition={}",
-								record.topic(), record.key(), record.value(), record.offset());
-						consumedRecords.add(record);
-					});
-			consumer.commitSync();
-		}
+		records.forEach(
+				record -> {
+					logger.info("Message received: topic={}, key={}, value={}, offset={}, partition={}",
+							record.topic(), record.key(), record.value(), record.offset());
+					consumedRecords.add(record);
+				});
+		consumer.commitSync();
 		consumer.close();
 		return consumedRecords;
 	}
 
 
 	private static Consumer<Integer, String> createConsumer() {
+
 		final Properties props = new Properties();
 		props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
 		props.put(ConsumerConfig.GROUP_ID_CONFIG, "KafkaExampleConsumer");
