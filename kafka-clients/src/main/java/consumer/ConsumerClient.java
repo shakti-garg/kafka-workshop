@@ -37,6 +37,7 @@ public class ConsumerClient {
 					});
 			consumer.commitSync();
 		}
+
 		consumer.close();
 		return consumedRecords;
 	}
