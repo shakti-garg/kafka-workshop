@@ -35,13 +35,10 @@ public class WordCountStreamAppTest {
 				new KeyValue<>("to", 2L)
 		);
 
+		TextLineProducer.publish(Arrays.asList(sentence1, sentence2));
 
-		Producer<String, String> producer = createProducer();
-
-		producer.send(new ProducerRecord<>(Topics.TEXT_LINE, sentence1));
-		producer.send(new ProducerRecord<>(Topics.TEXT_LINE, sentence2));
-
-		List<ConsumerRecord<String, Long>> consumerRecords = TextLineConsumer.consume(Topics.WORD_COUNT_OUTPUT, expectedWordCount.size());
+		List<ConsumerRecord<String, Long>> consumerRecords =
+				TextLineConsumer.consume(Topics.WORD_COUNT_OUTPUT, 10);
 
 		for (ConsumerRecord consumerRecord : consumerRecords) {
 			System.out.println(consumerRecord.key().toString());

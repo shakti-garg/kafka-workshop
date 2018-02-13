@@ -14,12 +14,14 @@ public class TextLineConsumer {
 	private static final String BOOTSTRAP_SERVERS = "kafka-cluster:9092";
 
 
-	public static List<ConsumerRecord<String, Long>> consume(String topic, int readUpto) {
+	public static List<ConsumerRecord<String, Long>> consume(String topic, int timeoutInSec) {
 		Consumer<String, Long> consumer = createConsumer(topic);
 		int responseCount = 0;
 		ArrayList<ConsumerRecord<String, Long>> consumedRecords = new ArrayList<>();
 
-		while (responseCount < readUpto) {
+		long startTime = System.currentTimeMillis();
+
+		while ((System.currentTimeMillis() - startTime) < (timeoutInSec * 1000)) {
 
 			final ConsumerRecords<String, Long> records = consumer.poll(1000);
 
@@ -41,6 +43,7 @@ public class TextLineConsumer {
 		props.put(ConsumerConfig.GROUP_ID_CONFIG, "KafkaWordCountExampleConsumer");
 		props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
 		props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, LongDeserializer.class.getName());
+		props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, 1000);
 
 		final Consumer<String, Long> consumer = new KafkaConsumer<>(props);
 		List<String> topics = Arrays.asList(topic);
