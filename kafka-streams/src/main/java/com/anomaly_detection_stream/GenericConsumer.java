@@ -36,8 +36,6 @@ public class GenericConsumer {
 						" but received only " + accumData.size() +
 						" records before timeout " + DEFAULT_TIMEOUT + " ms");
 			}
-
-			Thread.sleep(Math.min(DEFAULT_TIMEOUT, 100L));
 		}
 
 	}

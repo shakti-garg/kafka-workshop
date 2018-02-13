@@ -19,7 +19,7 @@ public class FirstStreamAppTest {
 		KafkaStreams stream = FirstStreamApp.createStream();
 		stream.start();
 
-		ArrayList<ConsumerRecord<Integer, String>> consumerRecords = ConsumerClient.consumeTill(5);
+		ArrayList<ConsumerRecord<Integer, String>> consumerRecords = ConsumerClient.consumeFor(5);
 
 		Assert.assertThat(consumerRecords.size(), is(5));
 

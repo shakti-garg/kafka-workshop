@@ -35,13 +35,12 @@ public class FirstStreamApp {
 		props.put(BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
 		props.put(DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.IntegerSerde.class.getName());
 		props.put(DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.StringSerde.class.getName());
-
+		props.put(COMMIT_INTERVAL_MS_CONFIG, "1000");
 
 		StreamsBuilder builder = new StreamsBuilder();
 		KStream<Integer, String> source = builder.stream(Topics.MY_TOPIC);
 		source.print();
-		source.filter((key, value) -> key % 2 == 0)
-				.peek((key, value) -> logger.info("filtered record: ({}, {})", key, value))
+		source.peek((key, value) -> logger.info("filtered record: ({}, {})", key, value))
 				.to(Topics.FILTERED_MY_TOPIC);
 
 		return new KafkaStreams(builder.build(), props);
