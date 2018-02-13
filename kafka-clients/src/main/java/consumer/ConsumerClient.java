@@ -25,15 +25,18 @@ public class ConsumerClient {
 
 		ArrayList<ConsumerRecord<Integer, String>> consumedRecords = new ArrayList<>();
 
-		final ConsumerRecords<Integer, String> records = consumer.poll(1000);
+		while(consumedRecords.size() < limit) {
 
-		records.forEach(
-				record -> {
-					logger.info("Message received: topic={}, key={}, value={}, offset={}, partition={}",
-							record.topic(), record.key(), record.value(), record.offset());
-					consumedRecords.add(record);
-				});
-		consumer.commitSync();
+			final ConsumerRecords<Integer, String> records = consumer.poll(0);
+
+			records.forEach(
+					record -> {
+						logger.info("Message received: topic={}, key={}, value={}, offset={}, partition={}",
+								record.topic(), record.key(), record.value(), record.offset());
+						consumedRecords.add(record);
+					});
+			consumer.commitSync();
+		}
 		consumer.close();
 		return consumedRecords;
 	}

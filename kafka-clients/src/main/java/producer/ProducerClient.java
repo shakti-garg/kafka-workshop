@@ -20,16 +20,17 @@ public class ProducerClient {
 		// Create Producer
 		final Producer<Integer, String> producer = createProducer();
 
-		ProducerRecord<Integer, String> record =
-				new ProducerRecord<>(TOPIC, 1, "message count: " + 1);
-		try {
-			RecordMetadata metadata = producer.send(record).get();
-			logger.info("Message sent: key={}, value={}, offset={}, partition={}", record.key(),
-					record.value(), metadata.offset(), metadata.partition());
-		} catch (Exception e) {
-			logger.error(e.getMessage());
+		for(int i=0; i<10; i++) {
+			ProducerRecord<Integer, String> record =
+					new ProducerRecord<>(TOPIC, i, "message count: " + i);
+			try {
+				RecordMetadata metadata = producer.send(record).get();
+				logger.info("Message sent: key={}, value={}, offset={}, partition={}", record.key(),
+						record.value(), metadata.offset(), metadata.partition());
+			} catch (Exception e) {
+				logger.error(e.getMessage());
+			}
 		}
-
 		producer.close();
 	}
 
