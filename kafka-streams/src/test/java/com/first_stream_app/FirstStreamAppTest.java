@@ -23,9 +23,7 @@ public class FirstStreamAppTest {
 
 		Assert.assertThat(consumerRecords.size(), is(5));
 
-
 		Runtime.getRuntime().addShutdownHook(new Thread(stream::close));
-
 
 	}
 }
