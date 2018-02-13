@@ -23,13 +23,12 @@ public class AnomalyDetectionTest {
 	@Test
 	public void shouldDetectAnomalousUser() throws Exception {
 		KafkaStreams stream = AnomalyDetectionStreamApp.createStream();
-		stream.cleanUp();
 		stream.start();
 
 		List<UserClick> userClicks = Arrays.asList(
 				new UserClick("bob", "10.1.2.5"),
 				new UserClick("alice", "192.168.4.2"),
-				new UserClick("John", "10.11.2.1"),
+				new UserClick("john", "10.11.2.1"),
 				new UserClick("alice", "192.168.4.2"),
 				new UserClick("bob", "10.1.2.5"),
 				new UserClick("alice", "192.168.4.2"),
@@ -56,18 +55,16 @@ public class AnomalyDetectionTest {
 
 		final Properties props = new Properties();
 		props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
-		props.put(ConsumerConfig.GROUP_ID_CONFIG, "KafkaWordCountExampleConsumer");
+		props.put(ConsumerConfig.GROUP_ID_CONFIG, "KafkaAnomalyDetectionExampleConsumer");
 		props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
 		props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, LongDeserializer.class.getName());
 
-		List<ConsumerRecord<String, Long>> anomalousUser = GenericConsumer.consumeRecords(Topics.ANOMALOUS_USER_TOPIC, props, 1);
+		List<ConsumerRecord<String, Long>> numberOfClicksPerUser = GenericConsumer.consumeRecords(Topics.CLICK_COUNT, props, 3);
 
-		print(anomalousUser);
+		print(numberOfClicksPerUser);
 
-		assertNotNull(anomalousUser);
-		assertThat(anomalousUser.size(), is(1));
-		assertThat(anomalousUser.get(0).key(), is("alice"));
-		assertThat(anomalousUser.get(0).value(), is(5L));
+		assertNotNull(numberOfClicksPerUser);
+		assertThat(numberOfClicksPerUser.size(), is(3));
 
 		stream.close();
 	}

@@ -1,16 +1,12 @@
 package com.wordcount_stream;
 
-import org.apache.kafka.common.serialization.Serdes;
-import org.apache.kafka.streams.*;
-import org.apache.kafka.streams.kstream.*;
+import org.apache.kafka.streams.KafkaStreams;
+import org.apache.kafka.streams.StreamsBuilder;
+import org.apache.kafka.streams.StreamsConfig;
 
-import java.lang.String;
-import java.util.Arrays;
-import java.util.Locale;
 import java.util.Properties;
 
-import static org.apache.kafka.common.serialization.Serdes.String;
-import static org.apache.kafka.common.serialization.Serdes.*;
+import static org.apache.kafka.common.serialization.Serdes.StringSerde;
 import static org.apache.kafka.streams.StreamsConfig.*;
 
 public class WordCountStreamApp {
@@ -30,17 +26,31 @@ public class WordCountStreamApp {
 		props.put(BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
 		props.put(DEFAULT_KEY_SERDE_CLASS_CONFIG, StringSerde.class.getName());
 		props.put(DEFAULT_VALUE_SERDE_CLASS_CONFIG, StringSerde.class.getName());
+		props.put(StreamsConfig.COMMIT_INTERVAL_MS_CONFIG, 1000);
 		props.put(StreamsConfig.STATE_DIR_CONFIG, "streams-store");
 
 		StreamsBuilder builder = new StreamsBuilder();
-		KStream<String, String> sentences = builder.stream(Topics.SENTENCES, Consumed.with(String(), String()));
-		KStream<String, Long> count = sentences.
-				flatMapValues(value -> Arrays.asList(value.toLowerCase(Locale.getDefault()).split("\\W+")))
-				.groupBy((key, value) -> value)
-				.count()
-				.toStream();
+		//Create Kstream from TEXT_LINE topic
 
-		count.to(Topics.WORD_COUNT_OUTPUT, Produced.with(Serdes.String(), Serdes.Long()));
+		//Map Values to lowercase
+
+
+		//FlatMapValues split by space (regex: "\\W+"))
+
+
+		//Map to apply key
+
+
+		//GroupByKey
+
+
+		//Count occurrence in each group
+
+
+		//Convert to stream (toStream)
+
+
+		//Write result to output topic  WORD_COUNT_OUTPUT using to()
 
 		return new KafkaStreams(builder.build(), props);
 	}

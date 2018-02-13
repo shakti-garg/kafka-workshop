@@ -6,10 +6,7 @@ import com.anomaly_detection_stream.serializer.UserClickSerializer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
-import org.apache.kafka.streams.Consumed;
-import org.apache.kafka.streams.KafkaStreams;
-import org.apache.kafka.streams.KeyValue;
-import org.apache.kafka.streams.StreamsBuilder;
+import org.apache.kafka.streams.*;
 import org.apache.kafka.streams.kstream.*;
 
 import java.lang.String;
@@ -45,25 +42,9 @@ public class AnomalyDetectionStreamApp {
 		props.put(BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
 		props.put(DEFAULT_KEY_SERDE_CLASS_CONFIG, StringSerde.class.getName());
 		props.put(DEFAULT_VALUE_SERDE_CLASS_CONFIG, StringSerde.class.getName());
-		props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+		props.put(StreamsConfig.COMMIT_INTERVAL_MS_CONFIG, 1000);
 
 		StreamsBuilder builder = new StreamsBuilder();
-
-		KStream<String, UserClick> source = builder.stream(Topics.USER_CLICK_TOPIC, Consumed.with(String(), userClickSerdes));
-
-		KGroupedStream<String, UserClick> stringUserClickKGroupedStream = source.map(((key, value) -> new KeyValue<>(value.getUser(), value)))
-				.groupByKey(Serialized.with(String(), userClickSerdes));
-
-		KTable<Windowed<String>, Long> count = stringUserClickKGroupedStream.windowedBy(
-				TimeWindows.of(TimeUnit.MINUTES.toMillis(1)))
-				.count();
-
-		KTable<Windowed<String>, Long> filterUser = count.filter((key, value) -> value >= 5);
-
-		KStream<Windowed<String>, Long> windowedLongKStream = filterUser.toStream().filter((key, value) -> value != null);
-
-		KStream<String, Long> map = windowedLongKStream.map((key, value) -> new KeyValue<>(key.key(), value));
-		map.to(Topics.ANOMALOUS_USER_TOPIC, Produced.with(Serdes.String(), Serdes.Long()));
 
 		return new KafkaStreams(builder.build(), props);
 	}
