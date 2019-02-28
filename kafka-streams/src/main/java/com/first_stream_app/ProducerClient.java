@@ -11,7 +11,7 @@ import java.util.Properties;
 public class ProducerClient {
 	private static final Logger logger = LoggerFactory.getLogger(ProducerClient.class);
 
-	private static final String BOOTSTRAP_SERVERS = "kafka-cluster:9092";
+	private static final String BOOTSTRAP_SERVERS = "localhost:9092";
 
 	public static void publish(int numberOfRecords) {
 		logger.info("started");

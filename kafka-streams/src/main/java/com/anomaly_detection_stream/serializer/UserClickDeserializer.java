@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.anomaly_detection_stream.model.UserClick;
 import org.apache.kafka.common.serialization.Deserializer;
 
+import java.io.StringReader;
 import java.util.Map;
 
 
@@ -19,9 +20,9 @@ public class UserClickDeserializer implements Deserializer<UserClick> {
 		ObjectMapper mapper = new ObjectMapper();
 		UserClick userClick = null;
 		try {
-			userClick = mapper.readValue(data, UserClick.class);
-		} catch (Exception e) {
-
+			userClick = mapper.readValue(new String(data), UserClick.class);
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 		return userClick;

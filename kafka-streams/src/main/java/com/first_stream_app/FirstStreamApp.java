@@ -3,6 +3,7 @@ package com.first_stream_app;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
+import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.KStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +16,7 @@ public class FirstStreamApp {
 
 	private static final Logger logger = LoggerFactory.getLogger(FirstStreamApp.class);
 
-	private static final String BOOTSTRAP_SERVERS = "kafka-cluster:9092";
+	private static final String BOOTSTRAP_SERVERS = "localhost:9092";
 
 	public static void main(String[] args) {
 		start();
@@ -39,10 +40,13 @@ public class FirstStreamApp {
 
 		StreamsBuilder builder = new StreamsBuilder();
 		KStream<Integer, String> source = builder.stream(Topics.MY_TOPIC);
-		source.print();
+		//source.print();
 		source.peek((key, value) -> logger.info("filtered record: ({}, {})", key, value))
 				.to(Topics.FILTERED_MY_TOPIC);
 
-		return new KafkaStreams(builder.build(), props);
+    Topology topology = builder.build();
+    logger.info(topology.describe().toString());
+
+    return new KafkaStreams(topology, props);
 	}
 }

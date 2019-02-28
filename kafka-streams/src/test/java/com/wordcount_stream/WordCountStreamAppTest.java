@@ -19,9 +19,7 @@ public class WordCountStreamAppTest {
 
 	@Test
 	public void shouldCountWord() throws Exception {
-		KafkaStreams stream = createStream();
-		stream.cleanUp();
-		stream.start();
+		WordCountStreamApp.main(new String[]{});
 
 		String sentence1 = "Hello Kafka Stream World";
 		String sentence2 = "Welcome to Kafka World";
@@ -46,8 +44,5 @@ public class WordCountStreamAppTest {
 		}
 
 		Assert.assertThat(consumerRecords.size(), is(6));
-
-		stream.close();
-
 	}
 }

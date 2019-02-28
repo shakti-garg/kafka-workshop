@@ -14,14 +14,12 @@ public class GenericConsumer {
 	public static final long DEFAULT_TIMEOUT = 30 * 1000L;
 
 	public static <K, V> List<ConsumerRecord<K, V>> consumeRecords(String topic, Properties consumerConfig, int expectedNumOfRecords) throws InterruptedException {
-
 		Consumer<K, V> consumer = createConsumer(topic, consumerConfig);
 
 		List<ConsumerRecord<K, V>> accumData = new ArrayList<>();
 		long startTime = System.currentTimeMillis();
 
 		while (true) {
-
 			ConsumerRecords<K, V> records = consumer.poll(1000);
 
 			records.forEach(accumData::add);
@@ -42,8 +40,8 @@ public class GenericConsumer {
 
 	private static <K, V> Consumer<K, V> createConsumer(String topic, Properties consumerConfig) {
 		final Consumer<K, V> consumer = new KafkaConsumer<>(consumerConfig);
-		List<String> topics = Arrays.asList(topic);
-		consumer.subscribe(topics);
+		consumer.subscribe(Arrays.asList(topic));
+
 		return consumer;
 	}
 }

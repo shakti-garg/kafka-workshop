@@ -1,22 +1,31 @@
 package com.wordcount_stream;
 
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.Producer;
-import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.ExecutionException;
 
 public class TextLineProducer {
 
-	private static final String BOOTSTRAP_SERVERS = "kafka-cluster:9092";
+	private static final String BOOTSTRAP_SERVERS = "localhost:9092";
 
 	public static void publish(List<String> sentences) {
 		Producer<String, String> producer = createProducer();
 
-		sentences.forEach(sentence -> producer.send(new ProducerRecord<>(Topics.TEXT_LINE, sentence)));
+		sentences.forEach(sentence -> {
+			try {
+				ProducerRecord<String, String> record = new ProducerRecord<>(Topics.TEXT_LINE, sentence);
+				RecordMetadata metadata = producer.send(record).get();
+				System.out.println(String.format("Message sent: key={%s}, value={%s}, offset={%d}, partition={%d}", record.key(),
+						record.value(), metadata.offset(), metadata.partition()));
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				e.printStackTrace();
+			}
+		});
 	}
 
 	public static Producer<String, String> createProducer() {

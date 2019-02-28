@@ -16,14 +16,13 @@ public class FirstStreamAppTest {
 	@Test
 	public void shouldFilterMyTopic() throws Exception {
 		ProducerClient.publish(NUMBER_OF_RECORDS);
-		KafkaStreams stream = FirstStreamApp.createStream();
-		stream.start();
+
+		FirstStreamApp.start();
 
 		ArrayList<ConsumerRecord<Integer, String>> consumerRecords = ConsumerClient.consumeFor(5);
+		Assert.assertThat(consumerRecords.size(), is(10));
 
-		Assert.assertThat(consumerRecords.size(), is(5));
-
-		Runtime.getRuntime().addShutdownHook(new Thread(stream::close));
+		//Runtime.getRuntime().addShutdownHook(new Thread(stream::close));
 
 	}
 }

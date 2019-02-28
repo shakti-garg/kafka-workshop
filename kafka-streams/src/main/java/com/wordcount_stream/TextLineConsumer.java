@@ -1,9 +1,12 @@
 package com.wordcount_stream;
 
+import com.first_stream_app.ConsumerClient;
 import org.apache.kafka.clients.consumer.*;
 import org.apache.kafka.common.serialization.IntegerDeserializer;
 import org.apache.kafka.common.serialization.LongDeserializer;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,8 +14,9 @@ import java.util.List;
 import java.util.Properties;
 
 public class TextLineConsumer {
-	private static final String BOOTSTRAP_SERVERS = "kafka-cluster:9092";
+	private static final Logger logger = LoggerFactory.getLogger(ConsumerClient.class);
 
+	private static final String BOOTSTRAP_SERVERS = "localhost:9092";
 
 	public static List<ConsumerRecord<String, Long>> consume(String topic, int timeoutInSec) {
 		Consumer<String, Long> consumer = createConsumer(topic);
@@ -29,6 +33,8 @@ public class TextLineConsumer {
 
 			records.forEach(
 					record -> {
+						logger.info("Message received: topic={}, key={}, value={}, offset={}, partition={}",
+								record.topic(), record.key(), record.value(), record.offset(), record.partition());
 						consumedRecords.add(record);
 					});
 			consumer.commitSync();

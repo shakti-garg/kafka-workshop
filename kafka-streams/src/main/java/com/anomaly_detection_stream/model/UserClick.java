@@ -17,7 +17,6 @@ public class UserClick {
 	}
 
 	public String getIpAddress() {
-
 		return ipAddress;
 	}
 

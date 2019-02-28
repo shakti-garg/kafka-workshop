@@ -18,12 +18,11 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
 public class AnomalyDetectionTest {
-	private static final String BOOTSTRAP_SERVERS = "kafka-cluster:9092";
+	private static final String BOOTSTRAP_SERVERS = "localhost:9092";
 
 	@Test
 	public void shouldDetectAnomalousUser() throws Exception {
-		KafkaStreams stream = AnomalyDetectionStreamApp.createStream();
-		stream.start();
+		AnomalyDetectionStreamApp.main(new String[]{});
 
 		List<UserClick> userClicks = Arrays.asList(
 				new UserClick("bob", "10.1.2.5"),
@@ -47,7 +46,6 @@ public class AnomalyDetectionTest {
 		useClickConsumerConfig.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, UserClickDeserializer.class.getName());
 
 		List<ConsumerRecord<String, UserClick>> useClickRecords = GenericConsumer.consumeRecords(Topics.USER_CLICK_TOPIC, useClickConsumerConfig, 10);
-
 		print(useClickRecords);
 
 		assertNotNull(useClickRecords);
@@ -60,13 +58,10 @@ public class AnomalyDetectionTest {
 		props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, LongDeserializer.class.getName());
 
 		List<ConsumerRecord<String, Long>> numberOfClicksPerUser = GenericConsumer.consumeRecords(Topics.CLICK_COUNT, props, 3);
-
 		print(numberOfClicksPerUser);
 
 		assertNotNull(numberOfClicksPerUser);
 		assertThat(numberOfClicksPerUser.size(), is(3));
-
-		stream.close();
 	}
 
 	private <K, V> void print(List<ConsumerRecord<K, V>> records) {

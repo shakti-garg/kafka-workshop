@@ -15,7 +15,7 @@ public class ConsumerClient {
 
 	private static final Logger logger = LoggerFactory.getLogger(ConsumerClient.class);
 
-	private static final String BOOTSTRAP_SERVERS = "kafka-cluster:9092";
+	private static final String BOOTSTRAP_SERVERS = "localhost:9092";
 	private static final List<String> TOPICS = Arrays.asList(Topics.FILTERED_MY_TOPIC);
 
 	public static ArrayList<ConsumerRecord<Integer, String>> consumeFor(int timeoutInSec) {
@@ -33,7 +33,7 @@ public class ConsumerClient {
 			records.forEach(
 					record -> {
 						logger.info("Message received: topic={}, key={}, value={}, offset={}, partition={}",
-								record.topic(), record.key(), record.value(), record.offset());
+								record.topic(), record.key(), record.value(), record.offset(), record.partition());
 						consumedRecords.add(record);
 					});
 			consumer.commitSync();
