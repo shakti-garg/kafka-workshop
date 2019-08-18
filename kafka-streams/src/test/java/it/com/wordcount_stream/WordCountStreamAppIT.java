@@ -1,5 +1,9 @@
 package com.wordcount_stream;
 
+import com.wordcount_stream.TextLineConsumer;
+import com.wordcount_stream.TextLineProducer;
+import com.wordcount_stream.Topics;
+import com.wordcount_stream.WordCountStreamApp;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -15,7 +19,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static com.wordcount_stream.TextLineProducer.createProducer;
 import static com.wordcount_stream.WordCountStreamApp.createStream;
 
-public class WordCountStreamAppTest {
+public class WordCountStreamAppIT {
 
 	@Test
 	public void shouldCountWord() throws Exception {
