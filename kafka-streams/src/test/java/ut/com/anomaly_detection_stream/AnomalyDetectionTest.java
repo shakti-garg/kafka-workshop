@@ -1,5 +1,9 @@
 package com.anomaly_detection_stream;
 
+import com.anomaly_detection_stream.AnomalyDetectionStreamApp;
+import com.anomaly_detection_stream.GenericConsumer;
+import com.anomaly_detection_stream.Topics;
+import com.anomaly_detection_stream.UserClickEventProducer;
 import com.anomaly_detection_stream.model.UserClick;
 import com.anomaly_detection_stream.serializer.UserClickDeserializer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;

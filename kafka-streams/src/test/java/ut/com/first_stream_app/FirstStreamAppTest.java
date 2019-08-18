@@ -1,5 +1,8 @@
 package com.first_stream_app;
 
+import com.first_stream_app.ConsumerClient;
+import com.first_stream_app.FirstStreamApp;
+import com.first_stream_app.ProducerClient;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.streams.KafkaStreams;
 import org.junit.Assert;
